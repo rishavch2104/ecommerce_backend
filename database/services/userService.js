@@ -11,4 +11,7 @@ module.exports = {
     await keyStoreService.addKey(keys);
     return newUser;
   },
+  findUserById: (id) => {
+    return Users.findById(id);
+  },
 };

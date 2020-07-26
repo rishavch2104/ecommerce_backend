@@ -10,10 +10,10 @@ module.exports = {
       new: true,
     });
   },
-  findKeyByUser:user=>{
-      return await KeyStore.findOne({user:user});
+  findKeyByUser: (user) => {
+    return KeyStore.findOne({ user: user });
   },
-  deleteKey:id=>{
-      return await KeyStore.findByIdAndDelete(id)
-  }
+  deleteKey: (id) => {
+    return KeyStore.findByIdAndDelete(id);
+  },
 };

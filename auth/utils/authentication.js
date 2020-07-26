@@ -1,12 +1,15 @@
 const express = require("express");
 const validator = require("./../../helpers/dataValidation");
+const asyncHandler = require("./../../helpers/asyncHandler");
+const userService = require("./../../database/services/userService");
+const keyStoreService = require("./../../database/services/keyStoreService");
 const { getAccessToken } = require("./authHelpers");
 const schema = require("./authSchema");
 const router = express.Router();
 const JWT = require("./JWT");
 
 router.use(
-  validator(schema, "headers"),
+  validator(schema.auth, "headers"),
   asyncHandler(async (req, res, next) => {
     req.accessToken = getAccessToken(req.headers.authorization);
     const payload = await JWT.validate(req.accessToken);

@@ -31,7 +31,7 @@ module.exports = {
     keys.user = user._id;
     await keyStoreService.updateKeys(keys);
     const tokens = await generateTokens(keys);
-    console.log(keys);
+
     return res.status(200).json(tokens);
   },
 

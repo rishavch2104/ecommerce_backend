@@ -7,6 +7,7 @@ module.exports = (schema, pointer = "body") => {
     const message = details
       .map((i) => i.message.replace(/['"]+/g, ""))
       .join(",");
-    throw new Error(message);
+    console.log(message);
+    throw new Error();
   };
 };
