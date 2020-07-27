@@ -17,6 +17,7 @@ const userSchema = new schema({
   },
   email: { type: String, required: true },
   password: { type: String, required: true },
+  role: { type: Number, required: true, default: 0 },
   addresses: [
     {
       buildingName: {
@@ -40,6 +41,7 @@ const userSchema = new schema({
       phoneNumber: { type: Number },
     },
   ],
+  orders: [{ type: Schema.Types.ObjectId, ref: "Orders" }],
 });
 
 const userModel = mongoose.model("Users", userSchema);
