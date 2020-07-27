@@ -3,6 +3,7 @@ const validator = require("./../../helpers/dataValidation");
 const asyncHandler = require("./../../helpers/asyncHandler");
 const userService = require("./../../database/services/userService");
 const keyStoreService = require("./../../database/services/keyStoreService");
+const { NotFoundError } = require("./../../errorHandling/apiError");
 const { getAccessToken } = require("./authHelpers");
 const schema = require("./authSchema");
 const router = express.Router();
@@ -14,10 +15,10 @@ router.use(
     req.accessToken = getAccessToken(req.headers.authorization);
     const payload = await JWT.validate(req.accessToken);
     const user = await userService.findUserById(payload.sub);
-    if (!user) throw new Error("User not found");
+    if (!user) next(new NotFoundError("User"));
     req.user = user;
     const keyStore = await keyStoreService.findKeyByUser(user._id);
-    if (!keyStore) throw new Error("Token Not Found");
+    if (!keyStore) next(new NotFoundError("Keys"));
     req.keyStore = keyStore;
     return next();
   })

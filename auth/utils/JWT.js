@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const { promisify } = require("util");
 const { readFile } = require("fs");
+
 const readPublicKey = () => {
   return promisify(readFile)(path.join(__dirname, "../keys/public.pem"));
 };

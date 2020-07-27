@@ -1,3 +1,5 @@
+const { ValidationError } = require("./../errorHandling/apiError");
+
 module.exports = (schema, pointer = "body") => {
   return (req, res, next) => {
     const { error } = schema.validate(req[pointer]);
@@ -7,7 +9,6 @@ module.exports = (schema, pointer = "body") => {
     const message = details
       .map((i) => i.message.replace(/['"]+/g, ""))
       .join(",");
-    console.log(message);
-    throw new Error();
+    next(new ValidationError(message));
   };
 };
