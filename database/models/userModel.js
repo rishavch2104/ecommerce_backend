@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-const schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const userSchema = new schema({
+const userSchema = new Schema({
   firstName: {
     type: String,
     required: [true, "First Name is a compulsory field"],
@@ -17,7 +17,7 @@ const userSchema = new schema({
   },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  role: { type: Number, required: true, default: 0 },
+  role: { type: String, enum: ["User", "Admin"], default: "User" },
   addresses: [
     {
       buildingName: {
