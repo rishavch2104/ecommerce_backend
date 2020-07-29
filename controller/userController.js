@@ -22,6 +22,7 @@ module.exports = {
 
     const hashedPassword = await bcrypt.hash(newUser.password, 10);
     newUser.password = hashedPassword;
+    newUser.role = "User";
 
     const keys = generateKeys();
     const addedUser = await userService.addUser(newUser, keys);
