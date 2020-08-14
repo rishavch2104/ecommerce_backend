@@ -25,12 +25,4 @@ module.exports = {
       throw new Error(e.message);
     }
   },
-  decode: async (token) => {
-    const cert = await readPublicKey();
-    try {
-      return promisify(jwt.verify)(token, cert), { ignoreExpiration: true };
-    } catch (e) {
-      throw new Error(e.message);
-    }
-  },
 };

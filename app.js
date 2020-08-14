@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/user/userRoutes");
 const productRouter = require("./routes/product/productRoutes");
 const categoryRouter = require("./routes/category/categoryRoutes");
@@ -7,7 +8,7 @@ const { NotFoundError } = require("./errorHandling/apiError");
 const app = express();
 
 app.use(express.json());
-
+app.use(cookieParser());
 app.use("/user", userRouter);
 app.use("/product", productRouter);
 app.use("/category", categoryRouter);

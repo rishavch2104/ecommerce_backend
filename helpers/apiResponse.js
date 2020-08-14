@@ -32,7 +32,7 @@ class SuccessResponse extends APIResponse {
 }
 
 class SuccessMessageResponse extends APIResponse {
-  constructor(message, data = null, statusCode = 204, status = "OK") {
+  constructor(message, data = null, statusCode = 200, status = "OK") {
     super(message, data, statusCode, statusCode);
   }
 }

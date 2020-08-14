@@ -15,16 +15,5 @@ module.exports = async (keys) => {
   });
   if (!accessToken) throw new TokenGenerationFailureError("Access");
 
-  const refreshToken = await JWT.encode({
-    iss: process.env.TOKEN_ISSUER,
-    aud: process.env.TOKEN_AUDIENCE,
-    sub: keys.user.toString(),
-    iat: iat,
-    param: keys.refreshTokenKey,
-    validity: parseInt(iat + process.env.REFRESH_TOKEN_VALIDITY * 24 * 60 * 60),
-  });
-
-  if (!refreshToken) throw new TokenGenerationFailureError("Refresh");
-
-  return { accessToken, refreshToken };
+  return accessToken;
 };

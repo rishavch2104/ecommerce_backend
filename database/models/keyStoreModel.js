@@ -6,10 +6,7 @@ const keyStoreSchema = new Schema({
     type: String,
     required: [true, "Access Token Key must be entered"],
   },
-  refreshTokenKey: {
-    type: String,
-    required: [true, "Refresh Token Key must be entered"],
-  },
+
   user: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
 });
 
