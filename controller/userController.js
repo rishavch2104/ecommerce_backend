@@ -1,5 +1,4 @@
-const bcrypt = require("bcrypt");
-
+const _ = require("lodash");
 const userService = require("./../database/services/userService");
 const keyStoreService = require("./../database/services/keyStoreService");
 const {
@@ -11,24 +10,21 @@ const {
   SuccessResponse,
   SuccessMessageResponse,
 } = require("./../helpers/apiResponse");
+const User = require("./../database/models/userModel");
 const generateKeys = require("./../auth/utils/generateKeys");
 const generateTokens = require("../auth/utils/generateTokens");
+
 module.exports = {
   registerUser: async (req, res, next) => {
-    const newUser = req.body;
-    if (await userService.findUserByEmail(newUser.email)) {
+    const newUser = _.cloneDeep(req.body);
+    if (await User.isEmailTaken(newUser.email)) {
       return next(new AlreadyExistsError("User"));
     }
-    if (!(await userService.isVerified)) {
-      return next(new AlreadyExistsError("Not verified"));
-    }
-
-    const hashedPassword = await bcrypt.hash(newUser.password, 10);
-    newUser.password = hashedPassword;
-    newUser.role = "User";
 
     const keys = generateKeys();
-    const addedUser = await userService.addUser(newUser, keys);
+    const addedUser = await userService.addUser(newUser);
+    keys.user = addedUser.id;
+    await keyStoreService.addKey(keys);
 
     const tokens = await generateTokens(keys);
     res.cookie("accessToken", tokens, { httpOnly: true });
@@ -37,12 +33,12 @@ module.exports = {
     }).send(res);
   },
   loginUser: async (req, res, next) => {
-    const userCredentials = req.body;
+    const userCredentials = _.cloneDeep(req.body);
 
     const user = await userService.findUserByEmail(userCredentials.email);
     if (!user) return next(new NotFoundError("User"));
 
-    const match = await bcrypt.compare(userCredentials.password, user.password);
+    const match = await user.isPasswordMatch(userCredentials.password);
     if (!match) return next(new IncorrectPasswordError());
     const keys = generateKeys();
     keys.user = user._id;

@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const ToJSON = require("../plugins/toJson");
 const Schema = mongoose.Schema;
