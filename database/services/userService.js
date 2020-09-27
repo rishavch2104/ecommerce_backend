@@ -8,8 +8,12 @@ module.exports = {
   isVerified: (id) => {
     return Users.findById(id).select("isVerified -_id");
   },
-  addUser: async (user) => {
-    return await Users.create(user);
+  addUser: async (user, keys) => {
+    const newUser = await Users.create(user);
+
+    keys.user = newUser._id;
+    await keyStoreService.addKey(keys);
+    return newUser;
   },
   findUserById: (id) => {
     return Users.findById(id);
