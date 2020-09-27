@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const ToJSON = require("../plugins/toJson");
 const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
@@ -14,6 +14,7 @@ const OrderSchema = new Schema({
   shipped: { type: Date },
 });
 
+OrderSchema.plugin(ToJSON);
 const orderModel = mongoose.model("Orders", OrderSchema);
 
 module.exports = orderModel;
