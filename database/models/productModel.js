@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const ToJSON = require("../plugins/toJson");
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
@@ -34,6 +34,8 @@ const productSchema = new Schema({
     },
   ],
 });
+
+productSchema.plugin(ToJSON);
 
 const productModel = mongoose.model("Products", productSchema);
 

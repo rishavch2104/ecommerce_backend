@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const ToJSON = require("../plugins/toJson");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -43,6 +43,26 @@ const userSchema = new Schema({
     },
   ],
   orders: [{ type: Schema.Types.ObjectId, ref: "Orders" }],
+});
+
+userSchema.plugin(ToJSON);
+
+userSchema.statics.isEmailTaken = async function (email, excludedUserId) {
+  const user = await this.findOne({ email, _id: { $ne: excludedUserId } });
+  return !!user;
+};
+
+userSchema.methods.isPasswordMatch = async function (password) {
+  const user = this;
+  return bcrypt.compare(password, user.password);
+};
+
+userSchema.pre("save", async function (next) {
+  const user = this;
+  if (user.isModified("password")) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+  next();
 });
 
 const userModel = mongoose.model("Users", userSchema);
