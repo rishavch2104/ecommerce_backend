@@ -5,11 +5,13 @@ module.exports = {
   findUserByEmail: (email) => {
     return Users.findOne({ email: email });
   },
+  isVerified:(id)=>{
+    return Users.findById(id).select('isVerified -_id')
+  }
   addUser: async (user, keys) => {
     const newUser = await Users.create(user);
-    console.log({ keys, newUser });
+
     keys.user = newUser._id;
-    console.log(keys);
     await keyStoreService.addKey(keys);
     return newUser;
   },

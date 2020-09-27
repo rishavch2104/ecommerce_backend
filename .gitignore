@@ -2,3 +2,4 @@ node_modules
 private.pem
 public.pem
 s3Keys.js
+config.env

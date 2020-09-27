@@ -37,7 +37,7 @@ class TokenGenerationFailureError extends APIError {
   }
 }
 class ValidationError extends APIError {
-  constructor(message, statusCode = "402") {
+  constructor(message, statusCode = "400") {
     super(message, statusCode);
   }
 }

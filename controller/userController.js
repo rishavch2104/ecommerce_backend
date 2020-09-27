@@ -19,6 +19,9 @@ module.exports = {
     if (await userService.findUserByEmail(newUser.email)) {
       return next(new AlreadyExistsError("User"));
     }
+    if (!(await userService.isVerified)) {
+      return next(new AlreadyExistsError("Not verified"));
+    }
 
     const hashedPassword = await bcrypt.hash(newUser.password, 10);
     newUser.password = hashedPassword;
@@ -35,6 +38,7 @@ module.exports = {
   },
   loginUser: async (req, res, next) => {
     const userCredentials = req.body;
+
     const user = await userService.findUserByEmail(userCredentials.email);
     if (!user) return next(new NotFoundError("User"));
 

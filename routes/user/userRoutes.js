@@ -21,5 +21,8 @@ router.delete(
   authentication,
   asyncHandler(userController.logoutUser)
 );
+router.get("/test", (req, res, next) => {
+  res.send("hello");
+});
 
 module.exports = router;
