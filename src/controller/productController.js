@@ -1,10 +1,12 @@
 const productService = require("../database/services/productService");
+const Product = require("../database/models/productModel");
 const {
   AlreadyExistsError,
   NotFoundError,
 } = require("../errorHandling/apiError");
 const { SuccessResponse } = require("../helpers/apiResponse");
 const APIutils = require(".././helpers/apiUtils");
+const _ = require("lodash");
 const AWS = require("aws-sdk");
 const uuid = require("uuid");
 const AWSKeys = require("./../auth/keys/s3Keys");
@@ -16,8 +18,9 @@ const s3 = new AWS.S3({
 
 module.exports = {
   addProduct: async (req, res, next) => {
-    const productDetails = req.body;
-    if (await productService.getProductByTitle(productDetails.title)) {
+    const productDetails = _.cloneDeep(req.body);
+    const product = await Product.isTitleTaken(productDetails.title);
+    if (product) {
       return next(new AlreadyExistsError("Product"));
     }
     const addedProduct = await productService.addProduct(productDetails);
@@ -28,8 +31,9 @@ module.exports = {
   },
   updateProduct: async (req, res, next) => {
     const id = req.params.id;
-    const productDetails = req.body;
-    if (await productService.getProductById(id)) {
+    const productDetails = _.cloneDeep(req.body);
+    const productExists = await Product.doesProductExist(id);
+    if (productExists) {
       const updateProduct = await productService.updateProduct(
         id,
         productDetails

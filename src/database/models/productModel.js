@@ -37,6 +37,15 @@ const productSchema = new Schema({
 
 productSchema.plugin(ToJSON);
 
+productSchema.statics.isTitleTaken = async function (title, excludedUserId) {
+  const product = await this.findOne({ title, _id: { $ne: excludedUserId } });
+  return !!product;
+};
+productSchema.statics.doesProductExist = async function (id) {
+  const product = await this.findById(id);
+  return !!product;
+};
+
 const productModel = mongoose.model("Products", productSchema);
 
 module.exports = productModel;

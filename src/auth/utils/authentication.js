@@ -11,7 +11,6 @@ const JWT = require("./JWT");
 
 router.use(
   asyncHandler(async (req, res, next) => {
-    console.log(req.cookies);
     req.accessToken = getAccessToken(req.cookies.accessToken);
     const payload = await JWT.validate(req.accessToken);
     const user = await userService.findUserById(payload.sub);

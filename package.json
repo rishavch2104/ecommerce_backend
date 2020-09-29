@@ -1,10 +1,12 @@
 {
   "name": "ecommerce_backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
   "author": "Rishav Chaudhary",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "  nodemon src/server.js",
+    "test": "jest -i",
+    "test:watch": "jest -i --watchAll"
   },
   "license": "MIT",
   "dependencies": {
@@ -17,11 +19,18 @@
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "http-status": "^1.4.2",
+    "jest": "^26.4.2",
     "joi": "^17.1.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "mongoose": "^5.9.25",
     "nodemon": "^2.0.4",
+    "supertest": "^5.0.0",
     "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "faker": "^5.1.0",
+    "mongodb-memory-server": "^6.8.1"
   }
 }

@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const httpStatus = require("http-status");
 const userService = require("./../database/services/userService");
 const keyStoreService = require("./../database/services/keyStoreService");
 const {
@@ -28,9 +29,13 @@ module.exports = {
 
     const tokens = await generateTokens(keys);
     res.cookie("accessToken", tokens, { httpOnly: true });
-    return new SuccessResponse("Registered SuccessFully", {
-      user: addedUser,
-    }).send(res);
+    return new SuccessResponse(
+      "Registered SuccessFully",
+      {
+        user: addedUser,
+      },
+      httpStatus.CREATED
+    ).send(res);
   },
   loginUser: async (req, res, next) => {
     const userCredentials = _.cloneDeep(req.body);

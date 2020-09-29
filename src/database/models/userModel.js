@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
-const ToJSON = require("../plugins/toJson");
+const toJSON = require("../plugins/toJson");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -17,7 +17,12 @@ const userSchema = new Schema({
     maxlength: [15, "Last Name cannot be more than 15 characters"],
   },
   email: { type: String, required: true },
-  password: { type: String, required: true },
+  password: {
+    type: String,
+    required: true,
+    private: true,
+    minlength: [8, "password should be at least 8 characters"],
+  },
   isVerified: { type: Boolean, default: false },
   role: { type: String, enum: ["User", "Admin"], default: "User" },
   addresses: [
@@ -46,7 +51,7 @@ const userSchema = new Schema({
   orders: [{ type: Schema.Types.ObjectId, ref: "Orders" }],
 });
 
-userSchema.plugin(ToJSON);
+userSchema.plugin(toJSON);
 
 userSchema.statics.isEmailTaken = async function (email, excludedUserId) {
   const user = await this.findOne({ email, _id: { $ne: excludedUserId } });
